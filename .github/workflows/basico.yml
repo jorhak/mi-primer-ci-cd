@@ -1,0 +1,25 @@
+name: Workflow basico
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  verificar_repositorio:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 📥 Verificar repositorio
+      uses: actions/checkout@v4
+    
+    - name: Imprimir saludo
+      run: |
+        echo "¡Hola desde el workflow básico! 🚀"
+        whoami
+        cat /etc/os-release
+
+    - name: 🧪 Test Sencillo
+      run: |
+        cat /etc/passwd

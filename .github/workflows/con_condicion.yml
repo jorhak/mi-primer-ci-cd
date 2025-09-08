@@ -19,16 +19,28 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content":"🚀 El código se ha actualizado en la rama main."}' ${{ secrets.DISCORD_WEBHOOK_URL }}
-          
-      - name: notificar email
-        if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')
-        uses: dawidd6/action-send-mail@v3
+
+      - name: Notificar email
+        id: auth
+        uses: google-github-actions/auth@v2
         with:
-          server_address: smtp.gmail.com  # Or your SMTP server
-          server_port: 465
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: GitHub Action Notification
-          body: 'A push was made to the main branch.'
-          to: recipient@example.com
-          from: sender@example.com
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          access_token_scopes: 'https://www.googleapis.com/auth/gmail.send'
+
+      - name: Enviar correo (en develop y feature/*) 📧
+        if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')
+        run: |
+          # Construye el cuerpo del correo en formato RFC 2822 y base64url
+          EMAIL_BODY=$(echo "From: 'itfuturovaca@gmail.com'
+          To: '0077amaterasu16@gmail.com.com'
+          Subject: Notificación desde GitHub Actions
+        
+          Un push ha ocurrido en la rama ${{ github.ref_name }}." | base64 | tr '+/' '-_' | tr -d '=\n')
+        
+          # Llama a la API de Gmail con el token de acceso
+          curl --request POST 'https://gmail.googleapis.com/gmail/v1/users/me/messages/send' \
+          --header "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
+          --header "Content-Type: application/json" \
+          --data-raw "{
+            \"raw\": \"$EMAIL_BODY\"
+          }"

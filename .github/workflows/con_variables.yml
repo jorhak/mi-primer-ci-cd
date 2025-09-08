@@ -1,0 +1,33 @@
+name: Agregando variables
+
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  VALOR1: "4"
+  VALOR2: "6"
+  OPERACION: "suma"
+
+jobs:
+    checkout:
+      runs-on: ubuntu-latest
+      steps:
+      - name: 📥 Descargar código
+        uses: actions/checkout@v4
+     
+      - name: Realizar operación
+        run: |
+          if [ "$OPERACION" == "suma" ]; then
+            RESULTADO=$((VALOR1 + VALOR2))
+            echo "La suma de $VALOR1 y $VALOR2 es: $RESULTADO"
+          fi
+
+
+    
+
+    
+  

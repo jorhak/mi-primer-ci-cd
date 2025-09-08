@@ -21,11 +21,6 @@ jobs:
           curl -H "Content-Type: application/json" -X POST -d '{"content":"🚀 El código se ha actualizado en la rama main."}' ${{ secrets.DISCORD_WEBHOOK_URL }}
           
       - name: notificar email
-        if: github.ref == 'refs/heads/main'
-        run: |
-          curl -H "Content-Type: application/json" -X POST -d '{"content":"🚀 El código se ha actualizado en la rama main."}' ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-      - name: Enviar correo electrónico (en develop y feature/*)
         if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')
         uses: dawidd6/action-send-mail@v3
         with:

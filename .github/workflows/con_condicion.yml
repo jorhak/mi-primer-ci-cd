@@ -15,6 +15,9 @@ jobs:
     rama:
       runs-on: ubuntu-latest
       steps:
+      - name: Revisar codigo
+        uses: actions/checkout@v4
+        
       - name: notificar discord (solo main)
         if: github.ref == 'refs/heads/main'
         run: |

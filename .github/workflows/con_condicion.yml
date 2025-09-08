@@ -21,25 +21,6 @@ jobs:
           curl -H "Content-Type: application/json" -X POST -d '{"content":"🚀 El código se ha actualizado en la rama main."}' ${{ secrets.DISCORD_WEBHOOK_URL }}
           
       - name: notificar email
-        if: Claro, aquí tienes un ejemplo de un flujo de trabajo de GitHub Actions que usa condiciones para ejecutar diferentes acciones según la rama. Este YAML envía un webhook a Discord para la rama main y un correo electrónico para develop y las ramas de feature/*.
-
-Flujo de trabajo con condiciones
-YAML
-￼
-name: Notificaciones de despliegue
-
-on:
-  push:
-    branches:
-      - main
-      - develop
-      - 'feature/*'
-
-jobs:
-  notificar:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notificar a Discord (solo en main)
         if: github.ref == 'refs/heads/main'
         run: |
           curl -H "Content-Type: application/json" -X POST -d '{"content":"🚀 El código se ha actualizado en la rama main."}' ${{ secrets.DISCORD_WEBHOOK_URL }}
